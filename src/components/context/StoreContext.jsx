@@ -1,53 +1,67 @@
-import React, { createContext, useState, useEffect } from "react";
-import axios from "axios";
-import { toast } from "react-toastify";
+import React, { createContext, useState } from "react";
 
-export const StoreContext = createContext(null);
+export const StoreContext = createContext();
 
 export const StoreContextProvider = ({ children }) => {
-  const url = "https://localhost:7274"; // Backend URL
-  const [token, setToken] = useState(localStorage.getItem("token") || "");
-  const [role, setRole] = useState(localStorage.getItem("role") || null);
+  const [user, setUser] = useState(null); // Store user details
+  const [token, setToken] = useState(null); // Store the JWT token
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${url}/api/Token/login`, { email, password });
-      if (response.data.token) {
-        const { token } = response.data;
-        const decodedToken = JSON.parse(atob(token.split(".")[1])); // Decode JWT
-        const userRole = decodedToken.role;
+      // Fetch the token from the backend
+      const response = await fetch("https://localhost:7274/api/Token/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-        setToken(token);
-        setRole(userRole);
-        localStorage.setItem("token", token);
-        localStorage.setItem("role", userRole);
-        toast.success("Login successful!");
-        return userRole; // Return role for navigation
+      if (response.ok) {
+        const data = await response.json();
+        setToken(data.token); // Save the token
+
+        // Fetch restaurant details using the email
+        const restaurantResponse = await fetch(
+          `https://localhost:7274/api/Restaurant/${email}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${data.token}`, // Include the token
+            },
+          }
+        );
+
+        if (restaurantResponse.ok) {
+          const restaurantData = await restaurantResponse.json();
+          setUser({
+            email,
+            role: data.role,
+            restaurantID: restaurantData.restaurantID, // Save restaurantID
+          });
+          return data.role; // Return the user's role
+        } else {
+          console.error("Failed to fetch restaurant details:", restaurantResponse.statusText);
+          return null;
+        }
       } else {
-        toast.error("Login failed!");
+        console.error("Login failed:", response.statusText);
+        return null;
       }
     } catch (error) {
-      toast.error("Invalid credentials or server error.");
+      console.error("Login error:", error);
+      return null;
     }
   };
 
   const logout = () => {
-    setToken("");
-    setRole(null);
-    localStorage.removeItem("token");
-    localStorage.removeItem("role");
-    toast.success("Logged out successfully!");
+    setUser(null);
+    setToken(null); // Clear the token
   };
 
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    const savedRole = localStorage.getItem("role");
-    if (savedToken) setToken(savedToken);
-    if (savedRole) setRole(savedRole);
-  }, []);
-
   return (
-    <StoreContext.Provider value={{ token, role, login, logout, url }}>
+    <StoreContext.Provider value={{ user, token, login, logout }}>
       {children}
     </StoreContext.Provider>
   );

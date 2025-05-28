@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { login, logout, user, setUser, role } = useContext(StoreContext); // Access login, logout, user, and role from context
+  const { login, logout, user } = useContext(StoreContext); // Access login, logout, and user from context
   const [data, setData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
 
@@ -16,18 +16,17 @@ const Login = () => {
   const onLogin = async (e) => {
     e.preventDefault();
     try {
-      const role = await login(data.email, data.password);
+      const role = await login(data.email, data.password); // Call login from StoreContext
       if (role) {
-        setUser({ email: data.email }); // Update user state with email
         if (role === "restaurant") {
-          navigate("/restaurant-management");
+          navigate("/restaurant-management"); // Navigate to restaurant dashboard
         } else if (role === "customer") {
-          navigate("/");
+          navigate("/"); // Navigate to home for customers
         } else {
-          toast.info("Invalid role or access.");
+          toast.error("Access restricted. Invalid role.");
         }
       } else {
-        toast.error("Invalid email or password. Please try again."); // Handle invalid credentials
+        toast.error("Invalid email or password. Please try again.");
       }
     } catch (error) {
       toast.error("An error occurred during login. Please try again.");
@@ -35,9 +34,8 @@ const Login = () => {
   };
 
   const onLogout = () => {
-    logout();
-    setUser(null); // Clear user details
-    navigate("/"); // Navigate to home after logout
+    logout(); // Call logout from StoreContext
+    navigate("/login"); // Navigate to login page after logout
   };
 
   return (

@@ -12,24 +12,38 @@ import MenuItem from './components/menuitem/Menuitem.jsx';
 import Register from './components/Register/Register.jsx';
 import Login from './components/login/login.jsx';
 import RestaurantManagement from './components/RestaurantManagement/RestaurantManagement.jsx';
+import Profile from './components/Dashboard/Profile.jsx';
+import Orders from './components/Dashboard/Orders.jsx';
+import AddMenuItem from './components/Dashboard/AddMenuItem.jsx';
+import UpdateOrderStatus from './components/Dashboard/UpdateOrderStatus.jsx';
+import ProtectedRoute from './components/Shared/ProtectedRoute.jsx';
 import { StoreContextProvider } from './components/context/StoreContext.jsx'; // Import StoreContextProvider
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <Route path='/' element={<Layout />}>
-      <Route path='' element={<Home />} />
-      <Route path='about' element={<About />} />
-      <Route path='contact' element={<Contact />} />
-      <Route path='user/:userid' element={<User />} />
-      <Route path='/menu' element={<MenuItem />} />
-      <Route path='/register' element={<Register />} />
-      <Route path='/login' element={<Login />} />
-      <Route path='/restaurant-management' element={<RestaurantManagement />} />
-      <Route 
-        loader={githubInfoLoader}
-        path='github' 
-        element={<Github />}
-      />
+    <Route path="/" element={<Layout />}>
+      <Route path="" element={<Home />} />
+      <Route path="About" element={<About />} />
+      <Route path="contact" element={<Contact />} />
+      <Route path="user/:userid" element={<User />} />
+      <Route path="/menu" element={<MenuItem />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+        path="/restaurant-management"
+        element={
+          <ProtectedRoute>
+            <RestaurantManagement />
+          </ProtectedRoute>
+        }
+      >
+        {/* Child routes for Restaurant Management */}
+        <Route path="profile" element={<Profile />} />
+        <Route path="orders" element={<Orders />} />
+        <Route path="add-menu-item" element={<AddMenuItem />} />
+        <Route path="update-order-status" element={<UpdateOrderStatus />} />
+      </Route>
+      <Route loader={githubInfoLoader} path="github" element={<Github />} />
     </Route>
   )
 );
