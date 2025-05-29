@@ -1,10 +1,10 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useEffect } from "react";
 
 export const StoreContext = createContext();
 
 export const StoreContextProvider = ({ children }) => {
   const [user, setUser] = useState(null); // Store user details
-  const [token, setToken] = useState(null); // Store the JWT token
+  const [token, setToken] = useState(localStorage.getItem("token") || null); // Load token from localStorage
 
   const login = async (email, password) => {
     try {
@@ -20,6 +20,7 @@ export const StoreContextProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         setToken(data.token); // Save the token
+        localStorage.setItem("token", data.token); // Persist token in localStorage
 
         // Fetch restaurant details using the email
         const restaurantResponse = await fetch(
@@ -58,7 +59,16 @@ export const StoreContextProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken(null); // Clear the token
+    localStorage.removeItem("token"); // Remove token from localStorage
   };
+
+  // Load token from localStorage on initial render
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) {
+      setToken(savedToken);
+    }
+  }, []);
 
   return (
     <StoreContext.Provider value={{ user, token, login, logout }}>

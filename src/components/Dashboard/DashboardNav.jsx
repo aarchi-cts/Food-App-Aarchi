@@ -45,6 +45,16 @@ const DashboardNav = () => {
             Update Order Status
           </NavLink>
         </li>
+        <li>
+          <NavLink
+            to="menu-items"
+            className={({ isActive }) =>
+              isActive ? "underline text-orange-500" : "hover:underline"
+            }
+          >
+            Menu Items
+          </NavLink>
+        </li>
       </ul>
     </nav>
   );
