@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+ 
 export default function Register() {
     const [formData, setFormData] = useState({
         username: '',
@@ -8,14 +8,45 @@ export default function Register() {
         role: 'customer', // Default role
     });
     const [message, setMessage] = useState('');
-
+    const [errors, setErrors] = useState({}); // State to store validation errors
+ 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+ 
+        // Validate fields on change
+        validateField(name, value);
     };
-
+ 
+    const validateField = (name, value) => {
+        let error = '';
+        if (name === 'username') {
+            const usernameRegex = /^[a-zA-Z0-9]+$/; // Only alphanumeric characters
+            if (!usernameRegex.test(value)) {
+                error = 'Username should not contain special characters.';
+            }
+        } else if (name === 'email') {
+            if (!value.endsWith('@gmail.com')) {
+                error = 'Email should end with @gmail.com.';
+            }
+        } else if (name === 'password') {
+            if (value.length < 8) {
+                error = 'Password should be at least 8 characters long.';
+            }
+        }
+        setErrors((prevErrors) => ({ ...prevErrors, [name]: error }));
+    };
+ 
     const handleSubmit = async (e) => {
         e.preventDefault();
+ 
+        // Check for errors before submitting
+        const hasErrors = Object.values(errors).some((error) => error);
+        if (hasErrors) {
+            setMessage('Please fix the validation errors before submitting.');
+            return;
+        }
+ 
         try {
             const response = await fetch('https://localhost:7274/api/User', {
                 method: 'POST',
@@ -24,7 +55,7 @@ export default function Register() {
                 },
                 body: JSON.stringify(formData),
             });
-
+ 
             if (response.ok) {
                 setMessage('Registration successful!');
             } else {
@@ -35,7 +66,7 @@ export default function Register() {
             setMessage('An error occurred. Please try again.');
         }
     };
-
+ 
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
             <h2 className="text-2xl font-bold mb-4">Register</h2>
@@ -50,6 +81,9 @@ export default function Register() {
                         className="w-full px-4 py-2 border rounded-lg"
                         required
                     />
+                    {errors.username && (
+                        <p className="text-red-500 text-sm mt-1">{errors.username}</p>
+                    )}
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700">Email</label>
@@ -61,6 +95,9 @@ export default function Register() {
                         className="w-full px-4 py-2 border rounded-lg"
                         required
                     />
+                    {errors.email && (
+                        <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+                    )}
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700">Password</label>
@@ -72,6 +109,9 @@ export default function Register() {
                         className="w-full px-4 py-2 border rounded-lg"
                         required
                     />
+                    {errors.password && (
+                        <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+                    )}
                 </div>
                 <div className="mb-4">
                     <label className="block text-gray-700">Role</label>
@@ -98,3 +138,6 @@ export default function Register() {
         </div>
     );
 }
+ 
+// can you add profile icon so that role base user can use it to do there dashboard
+ 

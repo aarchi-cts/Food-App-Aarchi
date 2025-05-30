@@ -2,28 +2,59 @@ import React, { useContext, useState } from "react";
 import { StoreContext } from "../context/StoreContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-
+ 
 const Login = () => {
   const { login, logout, user } = useContext(StoreContext); // Access login, logout, and user from context
   const [data, setData] = useState({ email: "", password: "" });
   const navigate = useNavigate();
-
+ 
   const onChangeHandler = (e) => {
     const { name, value } = e.target;
     setData((prevData) => ({ ...prevData, [name]: value }));
   };
-
+ 
+  // const onLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const role = await login(data.email, data.password); // Call login from StoreContext
+  //     if (role) {
+  //       if (role === "restaurant") {
+  //         navigate("/restaurant-management"); // Navigate to restaurant dashboard
+  //       } else if (role === "customer") {
+  //         navigate("/"); // Navigate to home for customers
+  //       } else {
+  //         toast.error("Access restricted. Invalid role.");
+  //       }
+  //     } else {
+  //       toast.error("Invalid email or password. Please try again.");
+  //     }
+  //   } catch (error) {
+  //     toast.error("An error occurred during login. Please try again.");
+  //   }
+  // };
+ 
+ 
+ 
   const onLogin = async (e) => {
     e.preventDefault();
     try {
       const role = await login(data.email, data.password); // Call login from StoreContext
       if (role) {
-        if (role === "restaurant") {
-          navigate("/restaurant-management"); // Navigate to restaurant dashboard
-        } else if (role === "customer") {
-          navigate("/"); // Navigate to home for customers
-        } else {
-          toast.error("Access restricted. Invalid role.");
+        switch (role) {
+          case "admin":
+            navigate("/"); // Navigate to admin dashboard
+            break;
+          case "restaurant":
+            navigate("/restaurant-management"); // Navigate to restaurant dashboard
+            break;
+          case "customer":
+            navigate("/"); // Navigate to home for c ustomers
+            break;
+          case "agent":
+            navigate("/"); // Navigate to agent dashboard
+            break;
+          default:
+            toast.error("Access restricted. Invalid role.");
         }
       } else {
         toast.error("Invalid email or password. Please try again.");
@@ -32,12 +63,14 @@ const Login = () => {
       toast.error("An error occurred during login. Please try again.");
     }
   };
-
+ 
+ 
+ 
   const onLogout = () => {
     logout(); // Call logout from StoreContext
     navigate("/login"); // Navigate to login page after logout
   };
-
+ 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
@@ -90,5 +123,6 @@ const Login = () => {
     </div>
   );
 };
-
+ 
 export default Login;
+ 
