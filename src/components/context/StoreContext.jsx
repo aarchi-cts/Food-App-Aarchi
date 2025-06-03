@@ -7,6 +7,7 @@ export const StoreContextProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || null); // Load token from localStorage
   const [customerID, setCustomerID] = useState(null); // Store customer ID
   const [cart, setCart] = useState([]); // Store cart items
+  const [currentRestaurant, setCurrentRestaurant] = useState(null);
 
   const login = async (email, password) => {
     try {
@@ -100,10 +101,115 @@ export const StoreContextProvider = ({ children }) => {
     localStorage.removeItem("token"); // Remove token from localStorage
   };
 
+  // const addToCart = (item) => {
+  //   if (currentRestaurant && currentRestaurant !== item.restaurantID) {
+  //     // Clear the cart if the restaurant is different
+  //     if (
+  //       !window.confirm(
+  //         "Adding items from a different restaurant will clear your current cart. Do you want to continue?"
+  //       )
+  //     ) {
+  //       return;
+  //     }
+  //     clearCart(); // Clear the cart
+  //   }
+  //   setCurrentRestaurant(item.restaurantID); // Set the current restaurant
+  //   const uniqueKey = `${item.restaurantID}-${item.itemID}`;
+  //   setCart((prevCart) => {
+  //     const updatedCart = { ...prevCart };
+  //     if (updatedCart[uniqueKey]) {
+  //       updatedCart[uniqueKey].count += 1;
+  //     } else {
+  //       updatedCart[uniqueKey] = { ...item, count: 1 };
+  //     }
+  //     return updatedCart;
+  //   });
+  // };
+
   const addToCart = (item) => {
-    setCart((prevCart) => [...prevCart, item]);
+    if (currentRestaurant && currentRestaurant !== item.restaurantID) {
+      // Clear the cart if the restaurant is different
+      if (
+        !window.confirm(
+          "Adding items from a different restaurant will clear your current cart. Do you want to continue?"
+        )
+      ) {
+        return; // User cancelled
+      }
+      clearCart(); // Clear the cart
+    }
+    setCurrentRestaurant(item.restaurantID); // Set the current restaurant
+  
+    const uniqueKey = `${item.restaurantID}-${item.itemID}`;
+  
+    setCart((prevCart) => {
+      // Create a deep copy of the previous cart state
+      const updatedCart = { ...prevCart };
+  
+      if (updatedCart[uniqueKey]) {
+        // Increment the count immutably
+        updatedCart[uniqueKey] = {
+          ...updatedCart[uniqueKey],
+          count: updatedCart[uniqueKey].count + 1,
+        };
+      } else {
+        // Add a new item with count 1
+        updatedCart[uniqueKey] = { ...item, count: 1 };
+      }
+  
+      return updatedCart; // Return the updated cart
+    });
   };
 
+
+
+
+
+
+  // const removeFromCart = (restaurantID, itemID) => {
+  //   const uniqueKey = `${restaurantID}-${itemID}`;
+  //   setCart((prevCart) => {
+  //     const updatedCart = { ...prevCart };
+  //     if (updatedCart[uniqueKey]) {
+  //       if (updatedCart[uniqueKey].count === 1) {
+  //         delete updatedCart[uniqueKey];
+  //       } else {
+  //         updatedCart[uniqueKey].count -= 1;
+  //       }
+  //     }
+  //     return updatedCart;
+  //   });
+  // };
+
+
+
+  const removeFromCart = (restaurantID, itemID) => {
+  const uniqueKey = `${restaurantID}-${itemID}`;
+  setCart((prevCart) => {
+    // Create a deep copy of the previous cart state
+    const updatedCart = { ...prevCart };
+
+    if (updatedCart[uniqueKey]) {
+      if (updatedCart[uniqueKey].count === 1) {
+        // Remove the item entirely if count is 1
+        delete updatedCart[uniqueKey];
+      } else {
+        // Decrement the count immutably
+        updatedCart[uniqueKey] = {
+          ...updatedCart[uniqueKey],
+          count: updatedCart[uniqueKey].count - 1,
+        };
+      }
+    }
+
+    return updatedCart; // Return the updated cart
+  });
+};
+
+  const clearCart = () => {
+    setCart({});
+    setCurrentRestaurant(null);
+  };
   // Load token from localStorage on initial render
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
@@ -114,9 +220,12 @@ export const StoreContextProvider = ({ children }) => {
 
   return (
     <StoreContext.Provider
-      value={{ user, token, customerID, cart, login, logout, addToCart }}
+      value={{ user, token, customerID, cart, login, logout, addToCart, removeFromCart, clearCart,}}
     >
       {children}
     </StoreContext.Provider>
   );
 };
+
+
+
