@@ -7,7 +7,7 @@ import Home from './components/Home/Home.jsx';
 import About from './components/About/About.jsx';
 import Contact from './components/Contact/Contact.jsx';
 import User from './components/User/User.jsx';
-import { ToastContainer } from "react-toastify"; // Import ToastContainer
+import { toast, ToastContainer } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css";
 // import MenuItem from './components/menuitem/Menuitem.jsx';
 import Register from './components/Register/Register.jsx';
@@ -41,7 +41,7 @@ const OrderSummaryWrapper = () => {
   const { cart } = useContext(StoreContext); // Access cart from context
   const placeOrder = () => {
     // Replace with actual order placement logic
-    alert("Order placed successfully!");
+    toast.success("Order placed successfully!");
   };
   return <OrderSummary cart={cart} placeOrder={placeOrder} />;
 };

@@ -278,11 +278,19 @@ const CustomerProfile = () => {
   const validateForm = () => {
     const newErrors = {};
 
-    // Validate phone number
     if (!/^\d{10}$/.test(formData.phone)) {
-      newErrors.phone = "Phone number must be 10 digits.";
+      newErrors.phone = "Phone number must be exactly 10 digits and consist only of numbers.";
+    } else if (/(\d)\1{5}/.test(formData.phone)) {
+      newErrors.phone = "Phone number cannot have a digit repeated more than 5 times consecutively.";
     }
 
+    // Validate address
+    if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "Phone number must be exactly 10 digits and consist only of numbers.";
+    } else if (/(\d)\1{5}/.test(formData.phone)) {
+      newErrors.phone = "Phone number cannot have a digit repeated more than 5 times consecutively.";
+    }
+  
     // Validate address
     if (!formData.address.trim()) {
       newErrors.address = "Address cannot be empty.";
@@ -366,9 +374,8 @@ const CustomerProfile = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                    errors.phone ? "border-red-500 focus:ring-red-500" : "focus:ring-orange-500"
-                  }`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.phone ? "border-red-500 focus:ring-red-500" : "focus:ring-orange-500"
+                    }`}
                 />
                 {errors.phone && (
                   <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
@@ -381,9 +388,8 @@ const CustomerProfile = () => {
                   name="address"
                   value={formData.address}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-                    errors.address ? "border-red-500 focus:ring-red-500" : "focus:ring-orange-500"
-                  }`}
+                  className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${errors.address ? "border-red-500 focus:ring-red-500" : "focus:ring-orange-500"
+                    }`}
                 />
                 {errors.address && (
                   <p className="text-red-500 text-sm mt-1">{errors.address}</p>

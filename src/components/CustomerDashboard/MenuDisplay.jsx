@@ -5,11 +5,11 @@ const MenuDisplay = () => {
   const navigate = useNavigate();
 
   const menuItems = [
-    { name: "Pizza", image: "/images/pizza.jfif" },
-    { name: "Burger", image: "/images/burger.jfif" },
-    { name: "Sandwich", image: "/images/sandwich.jfif" },
-    { name: "Tacos", image: "/images/tacos.jfif" },
-    { name: "Sushi", image: "/images/sushi.jfif" },
+    { name: "Pizza", image: "https://tse2.mm.bing.net/th/id/OIP.giyl2YTqBjzb8ckIWeEdbAHaHa?r=0&rs=1&pid=ImgDetMain" },
+    { name: "Burger", image: "https://d2i4dsjnpaubom.cloudfront.net/restaurant_products/images/000/000/147/large/Bacon_Deluxe_za_web.png?1559029069" },
+    { name: "Sandwich", image: "https://tse1.mm.bing.net/th/id/OIP.TKCLXxPZiIfMfDBRyEmFUAHaGe?r=0&rs=1&pid=ImgDetMain" },
+    { name: "Tacos", image: "https://tse2.mm.bing.net/th/id/OIP.VCtX2AWQIFJoM5FMpMvIdwHaF_?r=0&rs=1&pid=ImgDetMain" },
+    { name: "Sushi", image: "https://tse1.mm.bing.net/th/id/OIP.DqKyVWnLkRQkxiffQ300tgHaHa?r=0&rs=1&pid=ImgDetMain" },
   ];
 
   const handleSearchItem = (itemName) => {

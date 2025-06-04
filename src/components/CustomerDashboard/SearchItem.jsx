@@ -48,18 +48,18 @@ const SearchItem = () => {
     }, [searchQuery]);
 
     const handleAddToCart = (item) => {
-        if (!item.restaurant?.availability) {
+        if (item.restaurant && item.restaurant.availability === false) {
             toast.error("Cannot add item. The restaurant is closed.");
             return;
-          }
+        }
         addToCart(item); // Add item to cart
         toast.success("Item added to cart!");
     };
 
     const handleRemoveFromCart = (item) => {
-        if (!item.restaurant?.availability) {
-          toast.error("Cannot remove item. The restaurant is closed.");
-          return;
+        if (item.restaurant && item.restaurant.availability === false) {
+            toast.error("Cannot remove item. The restaurant is closed.");
+            return;
         }
         removeFromCart(item.restaurantID, item.itemID); // Remove item from cart
         toast.info("Item removed from cart.");
