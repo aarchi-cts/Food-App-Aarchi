@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 
 const RestaurantMenu = () => {
@@ -7,8 +7,12 @@ const RestaurantMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showGoToCart, setShowGoToCart] = useState(false); // State for "Go to Cart" button visibility
+  
 
   const { cart, addToCart, removeFromCart } = useContext(StoreContext); // Use StoreContext
+  const navigate = useNavigate();
+  const hasItemsInCart = Object.keys(cart).length > 0;
 
   useEffect(() => {
     // Fetch all menu items
@@ -42,6 +46,22 @@ const RestaurantMenu = () => {
     fetchMenuItems();
   }, [restaurantID]);
 
+  const handleAddToCart = (item) => {
+    addToCart(item); // Add item to cart
+    // toast.success("Item added to cart!"); // Show toast notification
+    setShowGoToCart(true); // Enable "Go to Cart" button
+  };
+
+  const handleRemoveFromCart = (item) => {
+    removeFromCart(item.restaurantID, item.itemID); // Remove item from cart
+    // toast.info("Item removed from cart."); // Show toast notification
+    setShowGoToCart(true); // Enable "Go to Cart" button
+  };
+
+  const handleGoToCart = () => {
+    navigate("/customer-management/cart"); // Navigate to the cart page
+  };
+
   return (
     <div className="p-4">
       <h2 className="text-2xl font-bold mb-4">Menu</h2>
@@ -66,7 +86,7 @@ const RestaurantMenu = () => {
               </div>
               <div className="flex items-center">
                 <button
-                  onClick={() => removeFromCart(item.restaurantID, item.itemID)}
+                  onClick={() => handleRemoveFromCart(item)}
                   className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-700"
                 >
                   -
@@ -75,7 +95,7 @@ const RestaurantMenu = () => {
                   {cart[`${item.restaurantID}-${item.itemID}`]?.count || 0}
                 </span>
                 <button
-                  onClick={() => addToCart(item)}
+                  onClick={() => handleAddToCart(item)}
                   className="bg-green-500 text-white px-2 py-1 rounded hover:bg-green-700"
                 >
                   +
@@ -86,6 +106,16 @@ const RestaurantMenu = () => {
         </ul>
       ) : (
         !loading && <p>No menu items found for this restaurant.</p>
+      )}
+
+      {/* "Go to Cart" Button */}
+      {hasItemsInCart && (
+        <button
+          onClick={handleGoToCart}
+          className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded shadow-md hover:bg-blue-600"
+        >
+          Go to Cart
+        </button>
       )}
     </div>
   );

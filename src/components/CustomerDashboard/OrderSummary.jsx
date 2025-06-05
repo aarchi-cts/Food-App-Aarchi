@@ -1,10 +1,17 @@
-// import React from "react";
+// import React, { useContext } from "react";
+// import { StoreContext } from "../context/StoreContext";
 
-// const OrderSummary = ({ cart = {}, placeOrder }) => {
+// const OrderSummary = () => {
+//   const { cart, clearCart } = useContext(StoreContext); // Access clearCart from StoreContext
 //   const cartItems = Object.values(cart); // Convert cart object to an array
 
 //   // Calculate the total amount
 //   const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.count, 0);
+
+//   const handlePlaceOrder = () => {
+//     toast.success("Order placed successfully!");
+//     clearCart(); // Clear the cart after placing the order
+//   };
 
 //   return (
 //     <div className="p-4">
@@ -27,7 +34,7 @@
 //       <div className="mt-4">
 //         <h3 className="text-lg font-bold">Total Amount: ₹{totalAmount}</h3>
 //         <button
-//           onClick={placeOrder}
+//           onClick={handlePlaceOrder}
 //           className="bg-green-500 text-white px-4 py-2 rounded mt-4 hover:bg-green-600"
 //         >
 //           Place Order
@@ -41,16 +48,18 @@
 
 import React, { useContext } from "react";
 import { StoreContext } from "../context/StoreContext";
+import { toast } from "react-toastify";
 
-const OrderSummary = ({ cart = {}, placeOrder }) => {
-  const { clearCart } = useContext(StoreContext); // Access clearCart from StoreContext
+const OrderSummary = () => {
+  const { cart, clearCart } = useContext(StoreContext); // Access cart and clearCart from StoreContext
   const cartItems = Object.values(cart); // Convert cart object to an array
 
   // Calculate the total amount
   const totalAmount = cartItems.reduce((sum, item) => sum + item.price * item.count, 0);
 
   const handlePlaceOrder = () => {
-    placeOrder(); // Call the placeOrder function (e.g., API call to place the order)
+    // Replace with actual order placement logic if needed
+    toast.success("Order placed successfully!");
     clearCart(); // Clear the cart after placing the order
   };
 

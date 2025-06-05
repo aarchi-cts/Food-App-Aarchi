@@ -1,14 +1,25 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { StoreContext } from "../context/StoreContext";
 
 export default function Header() {
-  const { user, logout } = useContext(StoreContext); // Access user and logout from context
+  const { user, logout} = useContext(StoreContext); // Access user and logout from context
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  
 
   const handleLogout = () => {
     logout(); // Call logout function from context
     navigate("/login"); // Redirect to login page after logout
+  };
+  const handleSearch = () => {
+    if (searchQuery.trim() === "") {
+      alert("Please enter a search query.");
+      return;
+    }
+    // Navigate to the search results page and pass the search query as state
+    navigate("/customer-management/search-results", { state: { searchQuery } });
+    setSearchQuery(""); // Clear the search query after navigating
   };
 
   return (
@@ -69,8 +80,7 @@ export default function Header() {
                     <NavLink
                       to="/restaurant-management/profile"
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -81,8 +91,7 @@ export default function Header() {
                     <NavLink
                       to="/restaurant-management/orders"
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -93,8 +102,7 @@ export default function Header() {
                     <NavLink
                       to="/restaurant-management/add-menu-item"
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -105,8 +113,7 @@ export default function Header() {
                     <NavLink
                       to="/restaurant-management/menu-items"
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -124,8 +131,7 @@ export default function Header() {
                       to="/customer-management"
                       end
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -136,8 +142,7 @@ export default function Header() {
                     <NavLink
                       to="/customer-management/profile1"
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -148,8 +153,7 @@ export default function Header() {
                     <NavLink
                       to="/customer-management/order-history"
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -160,8 +164,7 @@ export default function Header() {
                     <NavLink
                       to="/customer-management/cart"
                       className={({ isActive }) =>
-                        `block py-2 pr-4 pl-3 duration-200 ${
-                          isActive ? "text-orange-700" : "text-gray-700"
+                        `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                         } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                       }
                     >
@@ -176,8 +179,7 @@ export default function Header() {
                 <NavLink
                   to="/about"
                   className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 ${
-                      isActive ? "text-orange-700" : "text-gray-700"
+                    `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                     } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                   }
                 >
@@ -188,14 +190,35 @@ export default function Header() {
                 <NavLink
                   to="/contact"
                   className={({ isActive }) =>
-                    `block py-2 pr-4 pl-3 duration-200 ${
-                      isActive ? "text-orange-700" : "text-gray-700"
+                    `block py-2 pr-4 pl-3 duration-200 ${isActive ? "text-orange-700" : "text-gray-700"
                     } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
                   }
                 >
                   Contact
                 </NavLink>
               </li>
+
+              {user?.role === "customer" ? (
+                <>
+                  <li>
+                    <div className="flex items-center">
+                      <input
+                        type="text"
+                        placeholder="Search for menu items..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="border rounded px-4 py-2 w-full"
+                      />
+                      <button
+                        onClick={handleSearch}
+                        className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
+                      >
+                        Search
+                      </button>
+                    </div>
+                  </li>
+                </>
+              ) : null}
             </ul>
           </div>
         </div>

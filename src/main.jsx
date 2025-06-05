@@ -14,7 +14,7 @@ import Register from './components/Register/Register.jsx';
 import Login from './components/login/login.jsx';
 import RestaurantManagement from './components/RestaurantManagement/RestaurantManagement.jsx';
 import Profile from './components/Dashboard/Profile.jsx';
-
+import Header from './components/Header/Header.jsx';
 import CustomerProfile from './components/CustomerDashboard/CustomerProfile.jsx';
 import Orders from './components/Dashboard/Orders.jsx';
 import AddMenuItem from './components/Dashboard/AddMenuItem.jsx';
@@ -24,7 +24,7 @@ import ProtectedRoute from './components/Shared/ProtectedRoute.jsx';
 import { StoreContext, StoreContextProvider } from './components/context/StoreContext.jsx'; // Import StoreContextProvider
 import CustomerManagement from './components/CustomerManagement/CustomerManagement.jsx';
 import SearchItem from './components/CustomerDashboard/SearchItem.jsx';
-import CustSearchItemDash from './components/CustomerDashboard/CustSearchItemDash.jsx';
+// import CustSearchItemDash from './components/CustomerDashboard/CustSearchItemDash.jsx';
 import Cart from './components/CustomerDashboard/Cart.jsx';
 import MenuDisplay from './components/CustomerDashboard/MenuDisplay.jsx';
 import RestaurantMenu from './components/CustomerDashboard/RestaurantMenu.jsx';
@@ -32,19 +32,19 @@ import OrderHistory from './components/CustomerDashboard/OrderHistory.jsx';
 import SelectLocation from './components/CustomerDashboard/SelectLocation.jsx';
 import OrderSummary from './components/CustomerDashboard/OrderSummary.jsx';
 
-const CartWrapper = () => {
-  const { cart, removeFromCart } = useContext(StoreContext); // Access cart and removeFromCart from context
-  return <Cart cart={cart} removeFromCart={removeFromCart} />;
-};
-
-const OrderSummaryWrapper = () => {
-  const { cart } = useContext(StoreContext); // Access cart from context
-  const placeOrder = () => {
-    // Replace with actual order placement logic
-    toast.success("Order placed successfully!");
-  };
-  return <OrderSummary cart={cart} placeOrder={placeOrder} />;
-};
+// const CartWrapper = () => {
+//   const { cart, removeFromCart } = useContext(StoreContext); // Access cart and removeFromCart from context
+//   return <Cart cart={cart} removeFromCart={removeFromCart} />;
+// };
+ // Access cart and removeFromCart from context
+// const OrderSummaryWrapper = () => {
+//   const { cart } = useContext(StoreContext); // Access cart from context
+//   const placeOrder = () => {
+//     // Replace with actual order placement logic
+//     toast.success("Order placed successfully!");
+//   };
+//   return <OrderSummary cart={cart} placeOrder={placeOrder} />;
+// };
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -83,10 +83,10 @@ const router = createBrowserRouter(
         <Route path="search-results" element={<SearchItem />} />
         <Route path="menu" element={<MenuDisplay />} />
         <Route path="order-history" element={<OrderHistory/>} />
-        <Route path="cart" element={<CartWrapper/>} />
+        <Route path="cart" element={<Cart/>}/>
         <Route path="restaurant-menu/:restaurantID" element={<RestaurantMenu />} />
         <Route path="select-location" element={<SelectLocation/>} />
-        <Route path="order-summary" element={<OrderSummaryWrapper />} />
+        <Route path="order-summary" element={<OrderSummary/>} />
       </Route>
     </Route>
   )

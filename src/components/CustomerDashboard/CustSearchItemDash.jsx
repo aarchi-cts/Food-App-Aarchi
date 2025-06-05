@@ -1,10 +1,11 @@
-import CustomerNavbar from "./CustomerNavbar";
-import SearchItem from "./SearchItem"
+import Header from "../Header/Header";
+// import CustomerNavbar from "./CustomerNavbar";
 
 const CustSearchItemDash = ({children}) => {
     return (
         <div>
-            <CustomerNavbar />
+            {/* <CustomerNavbar /> */}
+            <Header/>
             <div className="p-4">{children}</div>
             <footer/>
         </div>
